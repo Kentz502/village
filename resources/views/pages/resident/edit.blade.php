@@ -2,19 +2,19 @@
 
 @section('content')
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Add Residence Data</h1>
+        <h1 class="h3 mb-0 text-gray-800">Update Residence Data</h1>
     </div>
 
     <div class="row">
         <div class="col">
-            <form action="/resident" method="post">
+            <form action="/resident/{{  $resident->id }}" method="post">
                 @csrf
-                @method('POST')
+                @method('PUT')
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group mb-3">
                             <label for="nik">NIK</label>
-                            <input type="number" inputmode="numeric" name="nik" id="nik" class="form-control @error('nik') is-invalid @enderror" value="{{ old('nik') }}">
+                            <input type="number" inputmode="numeric" name="nik" id="nik" class="form-control @error('nik') is-invalid @enderror" value="{{ old('nik', $resident->nik) }}">
                             @error('nik')
                                 <span class="invalid-feedback">
                                     {{ $message }}
@@ -23,7 +23,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="name">Full Name</label>
-                            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
+                            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $resident->name) }}">
                             @error('name')
                                 <span class="invalid-feedback">
                                     {{ $message }}
@@ -43,7 +43,7 @@
                                             "value" => "female"
                                         ],
                                     ] as $item)
-                                    <option value="{{ $item->value }}" @selected(old('gender') == $item->value)>{{ $item->label }}</option>
+                                    <option value="{{ $item->value }}" @selected(old('gender', $resident->gender) == $item->value)>{{ $item->label }}</option>
                                 @endforeach
                             </select>
                             @error('gender')
@@ -54,7 +54,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="birth_date">Birth Date</label>
-                            <input type="date" name="birth_date" id="birth_date" class="form-control @error('birth_date') is-invalid @enderror" value="{{ old('birth_date') }}">
+                            <input type="date" name="birth_date" id="birth_date" class="form-control @error('birth_date') is-invalid @enderror" value="{{ old('birth_date', $resident->birth_date) }}">
                             @error('birth_date')
                                 <span class="invalid-feedback">
                                     {{ $message }}
@@ -63,7 +63,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="birth_place">Birth Place</label>
-                            <input type="text" name="birth_place" id="birth_place" class="form-control @error('birth_place') is-invalid @enderror" value="{{ old('birth_place') }}">
+                            <input type="text" name="birth_place" id="birth_place" class="form-control @error('birth_place') is-invalid @enderror" value="{{ old('birth_place', $resident->birth_place) }}">
                             @error('birth_place')
                                 <span class="invalid-feedback">
                                     {{ $message }}
@@ -72,7 +72,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="address">Address</label>
-                            <textarea name="address" id="address" cols="30" rows="10" class="form-control @error('address') is-invalid @enderror">{{ old('address') }}</textarea>
+                            <textarea name="address" id="address" cols="30" rows="10" class="form-control @error('address') is-invalid @enderror">{{ old('address', $resident->address) }}</textarea>
                             @error('address')
                                 <span class="invalid-feedback">
                                     {{ $message }}
@@ -81,7 +81,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="religion">Religion</label>
-                            <input type="text" name="religion" id="religion" class="form-control @error('religion') is-invalid @enderror" value="{{ old('religion') }}">
+                            <input type="text" name="religion" id="religion" class="form-control @error('religion') is-invalid @enderror" value="{{ old('religion', $resident->religion) }}">
                             @error('religion')
                                 <span class="invalid-feedback">
                                     {{ $message }}
@@ -109,7 +109,7 @@
                                             "value" => "widowed"
                                         ],
                                     ] as $item)
-                                    <option value="{{ $item->value }}" @selected(old('marital_status') == $item->value)>{{ $item->label }}</option>
+                                    <option value="{{ $item->value }}" @selected(old('marital_status', $resident->marital_status) == $item->value)>{{ $item->label }}</option>
                                 @endforeach
                             </select>
                             @error('marital_status')
@@ -120,7 +120,7 @@
                         </div>
                         <div class="form-group mb-3">
                            <label for="occupation">Occupation</label>
-                            <input type="text" name="occupation" id="occupation" class="form-control @error('occupation') is-invalid @enderror" value="{{ old('occupation') }}">
+                            <input type="text" name="occupation" id="occupation" class="form-control @error('occupation') is-invalid @enderror" value="{{ old('occupation', $resident->occupation) }}">
                             @error('occupation')
                                 <span class="invalid-feedback">
                                     {{ $message }}
@@ -129,7 +129,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="phone">Phone</label>
-                            <input type="text" inputmode="numeric" name="phone" id="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}">
+                            <input type="text" inputmode="numeric" name="phone" id="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone', $resident->phone) }}">
                             @error('phone')
                                 <span class="invalid-feedback">
                                     {{ $message }}
@@ -153,7 +153,7 @@
                                             "value" => 'deceased'
                                         ],
                                     ] as $item)
-                                    <option value="{{ $item->value }}" @selected(old('status') == $item->value)>{{ $item->label }}</option>
+                                    <option value="{{ $item->value }}" @selected(old('status', $resident->status) == $item->value)>{{ $item->label }}</option>
                                 @endforeach
                             </select>
                             @error('status')
@@ -166,7 +166,7 @@
                     <div class="card-footer">
                         <div class="d-flex justify-content-end" style="gap: 10px;">
                             <a href="/resident" class="btn btn-outline-secondary">Back</a>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-warning">Save Changes</button>
                         </div>
                     </div>
                 </div>
