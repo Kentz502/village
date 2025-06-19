@@ -28,6 +28,10 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+        ], [
+            'email.required' => 'Email is required',
+            'email.email' => 'Email is invalid',
+            'password.required' => 'Password is required',
         ]);
 
         if (Auth::attempt($credentials)) {
@@ -37,12 +41,15 @@ class AuthController extends Controller
 
 
             if ($userStatus == 'submitted') {
+                $this->_logout($request);
+
                 return back()->withErrors([
-                    'email' => 'Your account is not approved by admin yet.']
+                    'email' => 'Your account is not approved by admin yet']
                 );
             } else if($userStatus == 'rejected') {
+                $this->_logout($request);
                 return back()->withErrors([
-                    'email' => 'Your account is rejected by admin.']
+                    'email' => 'Your account is rejected by admin']
                 );
             }
 
@@ -85,17 +92,22 @@ class AuthController extends Controller
         return redirect('/')->with('success', 'Account successfully created, wait for admin approval');
     }
 
+    public function _logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+    }
+
     public function logout(Request $request)
     {
         if(!Auth::check()) {
             return redirect('/');
         }
 
-        Auth::logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
+        $this->_logout($request);
 
         return redirect('/');
     }
