@@ -57,7 +57,7 @@
                                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationDelete-{{ $item->id }}">
                                         <i class="fas fa-eraser"></i>
                                     </button>
-                                    @if (is_null($item->user_id))
+                                    @if (!is_null($item->user_id))
                                     <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#detailAccount-{{ $item->id }}">
                                         Check Account
                                     </button>
