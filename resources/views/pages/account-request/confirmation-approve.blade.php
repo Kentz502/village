@@ -14,6 +14,15 @@
         <div class="modal-body">
             <input type="hidden" name="for" value="approve">
             <span>Are you sure to approve this account?</span>
+            <div class="form-group mt-3">
+                <label for="resident_id">Select Resident</label>
+                <select name="resident_id" id="resident_id" class="form-control">
+                    <option value="">None</option>
+                    @foreach ($residents as $item)
+                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                </select>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
