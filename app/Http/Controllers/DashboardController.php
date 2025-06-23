@@ -10,9 +10,6 @@ class DashboardController extends Controller
     public function index()
     {
         $residentCount = Resident::count();
-        $maleCount = Resident::where('gender', 'male')->count();
-        $femaleCount = Resident::where('gender', 'female')->count();
-
-        return view('pages.dashboard.index', compact('residentCount', 'maleCount', 'femaleCount'));
+        return view('pages.dashboard.index', compact('residentCount'));
     }
 }

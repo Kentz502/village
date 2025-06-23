@@ -19,6 +19,11 @@
                             </div>
                         </div>
                     </div>
+                    @if (auth()->user()->role_id == 1)
+                    <div class="card-footer text-end">
+                        <a href="/resident" class="text-primary small">More Info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
