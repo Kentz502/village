@@ -11,11 +11,11 @@
         <div class="modal-body">
             <div class="form-group mb-3">
                 <label for="name">Name</label>
-                <input type="text" name="name" class="form-control" value="{{ $item->user->name ?? '-' }}" readonly>
+                <input type="text" name="name" class="form-control" value="{{ $item->user->name}}" readonly>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" name="email" class="form-control" value="{{ $item->user->email ?? '-' }}" readonly>
+                <input type="email" name="email" class="form-control" value="{{ $item->user->email}}" readonly>
             </div>
         </div>
         <div class="modal-footer">
