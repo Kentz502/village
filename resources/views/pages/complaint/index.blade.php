@@ -1,0 +1,79 @@
+@extends('layouts.app')
+
+@section('content')
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Complaint</h1>
+        <a href="/complaint/create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+        class="fas fa-plus fa-sm text-white-50"></i> Add Report </a>
+    </div>
+
+     <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-body">
+                    <table class="table table-responsive table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Title</th>
+                                <th>Content</th>
+                                <th>Status</th>
+                                <th>Photo Proof</th>
+                                <th>Report Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @if (count($complaints) < 1)
+                            <tbody>
+                                <tr>
+                                    <td colspan="11">
+                                        <p class="pt-3 text-center">No Data Found</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        @else
+                            <tbody>
+                            @foreach ($complaints as $item)
+                            <tr>
+                                <td>{{ $loop->iteration + $complaints->firstItem() - 1 }}</td>
+                                <td>{{ $item->title }}</td>
+                                <td>{!!  wordwrap($item->content, 50, "<br>\n") !!}</td>
+                                <td>{{ $item->status_label }}</td>
+                                <td>
+                                @if (isset($item->photo_proof))
+                                @php
+                                    $filePath = 'storage/' . $item->photo_proof;
+                                @endphp
+                                    <a href="{{ $filePath }}" target="_blank" rel="noopener noreferrer">
+                                        <img src="{{ $filePath }}" alt="Photo Proof" style="max-width: 300px">
+                                    </a>
+                                @else
+                                    No Photo
+                                @endif</td>
+                                <td>{{ $item->report_date_label }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center" style="gap: 10px;">
+                                        <a href="/complaint/{{ $item->id }}" class="d-inline-block mr-2 btn btn-sm btn-warning mr-2">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationDelete-{{ $item->id }}">
+                                            <i class="fas fa-eraser"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @include('pages.complaint.confirmation-delete')
+                            @endforeach
+                        </tbody>
+                        @endif
+                    </table>
+                </div>
+                @if ($complaints->lastPage() > 1)
+                <div class="card-footer">
+                    {{ $residents->links('pagination::bootstrap-5') }}
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+@endsection
