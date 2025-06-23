@@ -13,7 +13,7 @@ class AuthController extends Controller
     public function login()
     {
         if(Auth::check()) {
-            return back();
+            return redirect('/dashboard');
         }
 
         return view('pages.auth.login');
