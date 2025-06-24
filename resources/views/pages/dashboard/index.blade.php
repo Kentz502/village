@@ -27,4 +27,55 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card shadow h-100 py-2">
+                    <div class="card-body">
+                    <h6 class="m-0 font-weight-bold text-primary">Gender Distribution</h6>
+                    <canvas id="genderChart"></canvas>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+        </div>
+@endsection
+
+@section('scripts')
+<script>
+    const ctx = document.getElementById('genderChart').getContext('2d');
+    const genderChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Male', 'Female'],
+            datasets: [{
+                label: 'Gender',
+                data: [{{ $maleCount }}, {{ $femaleCount }}],
+                backgroundColor: ['#4e73df', '#f6c23e'],
+                borderColor: ['#4e73df', '#f6c23e'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                datalabels: {
+                    color: '#000',
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    },
+                    formatter: function(value, context) {
+                        return value;
+                    }
+                }
+            },
+        },
+        plugins: [ChartDataLabels]
+    });
+</script>
 @endsection
