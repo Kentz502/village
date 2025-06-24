@@ -21,6 +21,11 @@
                 'path' => 'account-request',
                 'icon' => 'fas fa-fw fa-user',
             ],
+            (object) [
+                'title' => 'Complaint',
+                'path' => 'complaint',
+                'icon' => 'fas fa-fw fa-scroll',
+            ],
         ],
         2 => [
             (object) [

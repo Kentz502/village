@@ -27,15 +27,15 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xl-4 col-md-6 mb-4">
-                <div class="card shadow h-100 py-2">
-                    <div class="card-body">
-                    <h6 class="m-0 font-weight-bold text-primary">Gender Distribution</h6>
-                    <canvas id="genderChart"></canvas>
+            <div class="row">
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                        <div class="card-body">
+                        <h6 class="m-0 font-weight-bold text-primary">Gender Distribution</h6>
+                        <canvas id="genderChart"></canvas>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
 </div>

@@ -6,18 +6,28 @@ use App\Models\Complaint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ComplaintController extends Controller
 {
     public function index()
     {
-        $complaints = Complaint::where('resident_id', Auth::user()->resident->id)->paginate(10);
+        $residentId = Auth::user()->resident->id ?? null;
+        $complaints = Complaint::when(Auth::user()->role_id == 2, function ($query) use ($residentId) {
+            $query->where('resident_id', $residentId);
+        })->paginate(10);
 
         return view('pages.complaint.index', compact('complaints',));
     }
 
     public function create()
     {
+        $resident = Auth::user()->resident;
+
+        if (!$resident) {
+            return redirect('/complaint')->with('error', 'Your account is not registered on resident data.');
+        }
+
         return view('pages.complaint.create');
     }
 
@@ -29,8 +39,14 @@ class ComplaintController extends Controller
             'photo_proof' => ['nullable', 'mimes:jpg,jpeg,png', 'max:2048'],
         ]);
 
+        $resident = Auth::user()->resident;
+
+        if (!$resident) {
+            return redirect('/complaint')->with('error', 'Your account is not registered on resident data.');
+        }
+
         $complaint = new Complaint();
-        $complaint->resident_id = Auth::user()->resident->id;
+        $complaint->resident_id = $resident->id;
         $complaint->title = $request->input('title');
         $complaint->content = $request->input('content');
 
@@ -46,6 +62,12 @@ class ComplaintController extends Controller
 
     public function edit($id)
     {
+        $resident = Auth::user()->resident;
+
+        if (!$resident) {
+            return redirect('/complaint')->with('error', 'Your account is not registered on resident data.');
+        }
+
         $complaint = Complaint::findOrFail($id);
 
         return view('pages.complaint.edit', compact('complaint'));
@@ -59,8 +81,19 @@ class ComplaintController extends Controller
             'photo_proof' => ['nullable', 'mimes:jpg,jpeg,png', 'max:2048'],
         ]);
 
+        $resident = Auth::user()->resident;
+
+        if (!$resident) {
+            return redirect('/complaint')->with('error', 'Your account is not registered on resident data.');
+        }
+
         $complaint = Complaint::findOrFail($id);
-        $complaint->resident_id = Auth::user()->resident->id;
+
+        if($complaint->status != 'new') {
+            return redirect('/complaint')->with('error', "Failed to update complaint, your complaint is $complaint->status_label.");
+        }
+
+        $complaint->resident_id = $resident->id;
         $complaint->title = $request->input('title');
         $complaint->content = $request->input('content');
 
@@ -79,9 +112,39 @@ class ComplaintController extends Controller
 
     public function destroy($id)
     {
+        $resident = Auth::user()->resident;
+
+        if (!$resident) {
+            return redirect('/complaint')->with('error', 'Your account is not registered on resident data.');
+        }
+
         $complaint = Complaint::findOrFail($id);
+
+        if($complaint->status != 'new') {
+            return redirect('/complaint')->with('error', "Failed to delete complaint, your complaint is $complaint->status_label.");
+        }
+
         $complaint->delete();
 
         return redirect('/complaint')->with('success', 'Complaint deleted successfully.');
+    }
+
+    public function update_status(Request $request, $id)
+    {
+        $request->validate([
+            'status' => ['required', Rule::in(['new', 'processing', 'completed'])],
+        ]);
+
+        $resident = Auth::user()->resident;
+
+        if (Auth::user()->role_id == 2 && !$resident) {
+            return redirect('/complaint')->with('error', 'Your account is not registered on resident data.');
+        }
+
+        $complaint = Complaint::findOrFail($id);
+        $complaint->status = $request->input('status');
+        $complaint->save();
+
+        return redirect('/complaint')->with('success', 'Complaint status updated successfully.');
     }
 }
