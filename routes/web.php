@@ -12,6 +12,25 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+Route::get('/notifications', function() {
+    return view('pages.notifications');
+});
+Route::post('/notification/{id}/read', function ($id) {
+    $notification = \Illuminate\Support\Facades\DB::table('notifications')->where('id', $id);
+    $notification->update([
+        'read_at' => \Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'),
+    ]);
+
+    $dataArray = json_decode($notification->firstOrFail()->data, true);
+
+    if (isset($dataArray['complaint_id'])) {
+         return redirect('/complaint');
+    }
+
+    return back();
+
+})->middleware('role:Admin,User');
+
 Route::get('/', [AuthController::class, 'login']);
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout']);
